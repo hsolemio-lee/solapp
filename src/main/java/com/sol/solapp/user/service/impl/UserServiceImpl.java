@@ -8,8 +8,6 @@ import com.sol.solapp.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
