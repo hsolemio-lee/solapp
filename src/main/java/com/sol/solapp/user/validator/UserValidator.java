@@ -1,6 +1,7 @@
 package com.sol.solapp.user.validator;
 
 import com.sol.solapp.common.exception.code.ErrorCode;
+import com.sol.solapp.common.util.ValidateUtil;
 import com.sol.solapp.user.rest.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,12 @@ public class UserValidator implements Validator {
 
         if(null == dto.getFirstName() || "".equals(dto.getFirstName())) {
             log.error("invalid param : firstName");
-            errors.rejectValue("fisrtName", ErrorCode.PARAMETER_EMPTY.getCode());
+            errors.rejectValue("firstName", ErrorCode.PARAMETER_EMPTY.getCode());
+        }
+
+        if(!ValidateUtil.isValidEmail(dto.getEmail())) {
+            log.error("invalid param : email");
+            errors.rejectValue("email", ErrorCode.PARAMETER_INVALID.getCode());
         }
     }
 }
