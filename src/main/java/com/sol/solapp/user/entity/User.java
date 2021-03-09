@@ -1,12 +1,10 @@
 package com.sol.solapp.user.entity;
 
 import com.sol.solapp.common.entity.BaseEntity;
+import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Date;
 
@@ -19,6 +17,7 @@ import java.util.Date;
 public class User extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", length=50, nullable = false)
