@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
             userRepository.saveAll(users);
         } catch (IOException e) {
             log.error("CSV file error");
-            throw new ServiceException(ErrorCode.INTERNAL_SERVICE_EXCEPTION);
+            throw new ServiceException(ErrorCode.CSV_PARSE_ERROR);
         }
         return users.size();
     }
