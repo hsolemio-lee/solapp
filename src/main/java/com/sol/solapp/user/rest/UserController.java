@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -30,8 +31,14 @@ public class UserController {
     @ApiOperation(httpMethod = "POST", value = "user 추가", produces = "application/json", consumes = "application/json")
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        log.debug("[POST] /users #Create new user", "/rest/v1");
+        log.debug("[POST] /users #Create new user");
         return ResponseEntity.ok(userService.createUser(userDTO));
     }
 
+    @ApiOperation(httpMethod = "POST", value = "user csv 업로드", produces = "application/json", consumes = "application/json")
+    @PostMapping("/upload")
+    public ResponseEntity<Integer> uploadUsers(@RequestParam("file") MultipartFile file) {
+        log.debug("[POST] /users/upload # Create new users");
+        return ResponseEntity.ok(userService.createUser(file));
+    }
 }
