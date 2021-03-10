@@ -6,20 +6,26 @@ import com.sol.solapp.common.util.CSVUtil;
 import com.sol.solapp.user.entity.User;
 import com.sol.solapp.user.entity.converter.UserConverter;
 import com.sol.solapp.user.repository.UserRepository;
+import com.sol.solapp.user.rest.dto.InsertUserReportDTO;
 import com.sol.solapp.user.rest.dto.UserDTO;
 import com.sol.solapp.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -27,24 +33,39 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO createUser(UserDTO dto) {
         User user = UserConverter.INSTANCE.toEntity(dto);
-        userRepository.save(user);
+        user = userRepository.save(user);
         return UserConverter.INSTANCE.toDto(user);
     }
 
     @Override
-    public int createUser(MultipartFile file) {
+    public InsertUserReportDTO createUsers(MultipartFile file) {
         if(!CSVUtil.hasCSVFormat(file)) {
             throw new ServiceException(ErrorCode.INVALID_CSV_FILE);
         }
-        List<User> users = new ArrayList<>();
+        Map<Boolean, List<User>> partitionedUsers;
+
         try {
-            users = CSVUtil.convertCsvToUser(file.getInputStream());
-            userRepository.saveAll(users);
+            partitionedUsers = CSVUtil.convertCsvToUser(file.getInputStream());
         } catch (IOException e) {
             log.error("CSV file error");
             throw new ServiceException(ErrorCode.CSV_PARSE_ERROR);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ServiceException(ErrorCode.UNKNOWN_ERROR);
         }
-        return users.size();
+        List<User> users = partitionedUsers.get(true);
+        users = userRepository.saveAll(users);
+        userRepository.flush();
+        long updatedCount = users.stream().filter(user -> null == user.getCreateDate()).count();
+        long failedCount = partitionedUsers.get(false).size();
+        long totalCount = partitionedUsers.get(true).size() + partitionedUsers.get(false).size();
+        long insertedCount = totalCount - updatedCount - failedCount;
+        return InsertUserReportDTO.builder()
+                .updatedCount(updatedCount)
+                .failedCount(failedCount)
+                .insertedCount(insertedCount)
+                .totalCount(totalCount)
+                .build();
     }
 
 }
