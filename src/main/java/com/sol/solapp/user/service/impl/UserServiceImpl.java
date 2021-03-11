@@ -76,9 +76,9 @@ public class UserServiceImpl implements UserService {
 
     private final Function<CSVRecord, User> convertUser = record -> User.builder()
             .id("".equals(record.get(HEADER[0])) ? 0L : Long.parseLong(record.get(HEADER[0])))
-            .firstName(record.get(HEADER[1]))
-            .lastName(record.get(HEADER[2]))
-            .email(record.get(HEADER[3]))
+            .firstName(Optional.ofNullable(record.get(HEADER[1])).orElse(""))
+            .lastName(Optional.ofNullable(record.get(HEADER[2])).orElse(""))
+            .email(Optional.ofNullable(record.get(HEADER[3])).orElse(""))
             .build();
 
     private final Predicate<User> validationRule = user -> !user.getId().equals(0L)

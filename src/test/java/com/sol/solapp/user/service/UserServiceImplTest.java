@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceImplTest {
 
     private final String CSV_TYPE = "text/csv";
-    private final String TXT_TYPE = "text/plain";
+    private final String TXT_TYPE = "test";
 
     @Spy
     @InjectMocks

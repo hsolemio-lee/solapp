@@ -20,14 +20,17 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class CSVUtil {
 
-    private final String[] TYPE = {"text/csv",
+    private final String[] TYPE = {
+            "text/csv",
             "text/plain",
             "application/vnd.ms-excel",
             "text/x-csv",
             "application/x-csv",
             "text/comma-separated-values",
             "text/x-comma-separated-values",
-            "text/tab-separated-values"};
+            "text/tab-separated-values",
+            "application/octet-stream",
+    };
 
     public boolean hasCSVFormat(MultipartFile file) {
         return Arrays.stream(TYPE).anyMatch(s -> s.equals(file.getContentType()));

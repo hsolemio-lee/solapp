@@ -1,6 +1,10 @@
 <template>
-	<div>
-		<sol-dropzone></sol-dropzone>
+	<div class="upload-page">
+		<sol-dropzone
+            :acceptedFiles="'.csv'"
+            :maxFiles="1"
+        />
+        <md-button>Upload</md-button>
 	</div>
 </template>
 <script>
@@ -26,6 +30,13 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
-
+<style>
+    .upload-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
 </style>

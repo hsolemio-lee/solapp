@@ -5,6 +5,15 @@ import App from './App'
 import router from './router'
 
 import { solAxios } from '@/config/axios/solAxios';
+
+import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
+
+Vue.use(MdButton);
+Vue.use(MdContent);
+Vue.use(MdTabs);
+
 Vue.prototype.$http = solAxios;
 
 Vue.config.productionTip = false
