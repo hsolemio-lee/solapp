@@ -92,6 +92,9 @@
             },
             removeFileEvent() {
                 this.dropzoneStatus.fileCount = this.$refs.dropzoneCore.dropzone.files.length;
+            },
+            processQueue() {
+                this.$refs.dropzoneCore.processQueue();
             }
 		}
 	}
@@ -99,7 +102,7 @@
 <style lang="scss">
 
     .dropzone-wrapper {
-        margin: 50px;
+        margin: 50px 20px 10px 20px;
         padding: 20px;
         width: 350px;
         height: 350px;
