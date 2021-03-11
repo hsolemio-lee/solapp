@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -19,10 +20,17 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class CSVUtil {
 
-    private final String TYPE = "text/csv";
+    private final String[] TYPE = {"text/csv",
+            "text/plain",
+            "application/vnd.ms-excel",
+            "text/x-csv",
+            "application/x-csv",
+            "text/comma-separated-values",
+            "text/x-comma-separated-values",
+            "text/tab-separated-values"};
 
     public boolean hasCSVFormat(MultipartFile file) {
-        return TYPE.equals(file.getContentType());
+        return Arrays.stream(TYPE).anyMatch(s -> s.equals(file.getContentType()));
     }
 
     public <T> Map<Boolean, List<T>> convertCsvToEntity(InputStream is
