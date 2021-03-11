@@ -9,9 +9,9 @@ public enum ErrorCode {
     PARAMETER_EMPTY("SOL400-001", "Parameter is empty"),
     PARAMETER_INVALID("SOL400-002", "Parameter is invalid"),
     ID_EXIST("SOL400-003", "ID already exists"),
-    INTERNAL_SERVICE_EXCEPTION("SOL500-001", "Internal service exception."),
-    UNKNOWN_ERROR("SOL500-002", "Unknown error"),
-    INVALID_CSV_FILE("SOL500-003", "Invalid CSV file"),
+    INVALID_CSV_FILE("SOL400-004", "Invalid CSV file"),
+    CSV_PARSE_ERROR("SOL400-005", "CSV Parsing Error"),
+    UNKNOWN_ERROR("SOL500-001", "Unknown error"),
     ;
 
     private String code;

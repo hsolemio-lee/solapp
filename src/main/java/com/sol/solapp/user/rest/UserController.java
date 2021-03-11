@@ -1,5 +1,6 @@
 package com.sol.solapp.user.rest;
 
+import com.sol.solapp.user.rest.dto.InsertUserReportDTO;
 import com.sol.solapp.user.rest.dto.UserDTO;
 import com.sol.solapp.user.service.UserService;
 import com.sol.solapp.user.validator.UserValidator;
@@ -37,8 +38,8 @@ public class UserController {
 
     @ApiOperation(httpMethod = "POST", value = "user csv 업로드", produces = "application/json", consumes = "application/json")
     @PostMapping("/upload")
-    public ResponseEntity<Integer> uploadUsers(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<InsertUserReportDTO> uploadUsers(@RequestParam("file") MultipartFile file) {
         log.debug("[POST] /users/upload # Create new users");
-        return ResponseEntity.ok(userService.createUser(file));
+        return ResponseEntity.ok(userService.createUsers(file));
     }
 }

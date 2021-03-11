@@ -13,4 +13,8 @@ public class ValidateUtil {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
         return matcher.find();
     }
+
+    public boolean isEmpty(String str) {
+        return null == str || "".equals(str);
+    }
 }

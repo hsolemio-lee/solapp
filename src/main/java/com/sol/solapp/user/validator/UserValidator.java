@@ -21,9 +21,19 @@ public class UserValidator implements Validator {
     public void validate(Object target, Errors errors) {
         UserDTO dto = (UserDTO) target;
 
-        if(null == dto.getFirstName() || "".equals(dto.getFirstName())) {
+        if(ValidateUtil.isEmpty(dto.getFirstName())) {
             log.error("invalid param : firstName");
             errors.rejectValue("firstName", ErrorCode.PARAMETER_EMPTY.getCode());
+        }
+
+        if(ValidateUtil.isEmpty(dto.getLastName())) {
+            log.error("invalid param : lastName");
+            errors.rejectValue("lastName", ErrorCode.PARAMETER_EMPTY.getCode());
+        }
+
+        if(ValidateUtil.isEmpty(dto.getEmail())) {
+            log.error("invalid param : email");
+            errors.rejectValue("email", ErrorCode.PARAMETER_EMPTY.getCode());
         }
 
         if(!ValidateUtil.isValidEmail(dto.getEmail())) {
