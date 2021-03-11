@@ -3,6 +3,7 @@ package com.sol.solapp.user.service.impl;
 import com.sol.solapp.common.exception.ServiceException;
 import com.sol.solapp.common.exception.code.ErrorCode;
 import com.sol.solapp.common.util.CSVUtil;
+import com.sol.solapp.common.util.ValidateUtil;
 import com.sol.solapp.user.entity.User;
 import com.sol.solapp.user.entity.converter.UserConverter;
 import com.sol.solapp.user.repository.UserRepository;
@@ -11,6 +12,7 @@ import com.sol.solapp.user.rest.dto.UserDTO;
 import com.sol.solapp.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +33,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final String[] HEADER = { "id", "firstname", "lastname", "email" };
 
     @Override
     public UserDTO createUser(UserDTO dto) {
@@ -45,7 +51,7 @@ public class UserServiceImpl implements UserService {
         Map<Boolean, List<User>> partitionedUsers;
 
         try {
-            partitionedUsers = CSVUtil.convertCsvToUser(file.getInputStream());
+            partitionedUsers = CSVUtil.convertCsvToEntity(file.getInputStream(), convertUser, validationRule);
         } catch (IOException e) {
             log.error("CSV file error");
             throw new ServiceException(ErrorCode.CSV_PARSE_ERROR);
@@ -68,4 +74,16 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    private final Function<CSVRecord, User> convertUser = record -> User.builder()
+            .id("".equals(record.get(HEADER[0])) ? 0L : Long.parseLong(record.get(HEADER[0])))
+            .firstName(record.get(HEADER[1]))
+            .lastName(record.get(HEADER[2]))
+            .email(record.get(HEADER[3]))
+            .build();
+
+    private final Predicate<User> validationRule = user -> !user.getId().equals(0L)
+            && !ValidateUtil.isEmpty(user.getFirstName())
+            && !ValidateUtil.isEmpty(user.getLastName())
+            && !ValidateUtil.isEmpty(user.getEmail())
+            && ValidateUtil.isValidEmail(user.getEmail());
 }
