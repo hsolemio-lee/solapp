@@ -1,26 +1,48 @@
 <template>
-	<div class="dropzone-wrapper">
-		<vue-dropzone id="upload"
-                      ref="dropzoneCore"
-		              :class="dropzoneClass"
-		              :options="config"
-                      @vdropzone-complete="successEvent"
-                      @vdropzone-file-added="fileAddedEvent"
-                      @vdropzone-total-upload-progress="()=>{}"
-                      @vdropzone-removed-file="removeFileEvent"
-        >
-            <img class="upload-image" src="@/assets/upload.png"/>
-            <p>Drop the file here or click to upload</p>
-            <p>You can upload only {{this.acceptedFiles}} file</p>
-        </vue-dropzone>
+	<div class="sol-drop-zone-main">
+		<div class="dropzone-wrapper">
+			<vue-dropzone v-show="showDropzone"
+				          id="upload"
+			              ref="dropzoneCore"
+			              :class="dropzoneClass"
+			              :options="config"
+			              @vdropzone-success="successEvent"
+			              @vdropzone-file-added="fileAddedEvent"
+			              @vdropzone-total-upload-progress="totalProgressEvent"
+			              @vdropzone-removed-file="removeFileEvent"
+			              @vdropzone-queue-complete="queueCompleteEvent"
+			              @vdropzone-error="dropzoneErrorEvent"
+			>
+				<img class="upload-image" src="@/assets/upload.png"/>
+				<p>Drop the file here or click to upload</p>
+				<p>You can upload only {{this.acceptedFiles}} file</p>
+			</vue-dropzone>
+			<div v-show="!showDropzone" class="sol-drop-zone-success">
+				<p>Upload Success!!!</p>
+				<md-button class="upload-another-file-btn" @click="clickUloadAnotherEvent">Upload another file.</md-button>
+			</div>
+		</div>
+		<div>
+			<md-button
+				class="upload-btn"
+				@click="clickUploadEvent"
+				:disabled="isDisableUploadBtn"
+			>Upload</md-button>
+		</div>
+		<progress-popup
+			:status="progressbarOption.status"
+			:value="progressbarOption.value"
+			:report="report"
+		/>
 	</div>
 </template>
 <script>
 	import vueDropzone from 'vue2-dropzone';
+	import progressPopup from "./progressPopup";
 
 	export default {
 		name: 'SolDropzone',
-		components: {vueDropzone},
+		components: {vueDropzone, progressPopup},
 		props: {
             acceptedFiles: {
                 type: [String, Array],
@@ -44,26 +66,43 @@
                     acceptedFiles: '.csv',
                     previewTemplate: this.fileTemplate(),
                     autoProcessQueue: false,
-
+					destroyDropzone: true,
+					clickable: true,
 				},
                 dropzoneStatus: {
                     fileCount: 0,
-                }
+	                status: ''
+                },
+				progressbarOption: {
+					mode: 'determinate',
+					value: 0,
+					status: 'hide'
+				},
+				report: {
+					insertedCount: 0,
+					updatedCount: 0,
+					failedCount: 0,
+					totalCount: 0,
+				}
 			}
 		},
         computed: {
 		    dropzoneClass() {
 		        return this.dropzoneStatus.fileCount > 0 ? 'sol-drop-zone remove-message' : 'sol-drop-zone';
-            }
+            },
+	        isDisableUploadBtn() {
+		        return this.progressbarOption.status !== 'ready';
+	        },
+	        showDropzone() {
+		    	console.log(this.progressbarOption.status);
+		    	return this.progressbarOption.status !== 'complete';
+	        }
         },
 		created() {
             this.config.maxFiles = this.maxFiles;
             this.config.acceptedFiles = this.acceptedFiles;
 		},
 		methods: {
-            successEvent() {
-
-            },
             fileTemplate() {
                 return `<div class="dz-preview dz-file-preview sol-dropzone-preview">
                           <div class="dz-image">
@@ -78,24 +117,53 @@
                           <div class="dz-success-mark"><i class="fa fa-check"></i></div>
                           <div class="dz-error-mark"><i class="fa fa-close"></i></div>
                         </div>
-                        <input type="button" >Upload</input>
 `;
             },
+			successEvent(file, res) {
+				this.report.insertedCount = res.insertedCount;
+				this.report.updatedCount = res.updatedCount;
+				this.report.failedCount = res.failedCount;
+				this.report.totalCount = res.totalCount;
+				this.progressbarOption.status = 'complete';
+			},
             fileAddedEvent(file) {
-
                 if(this.$refs.dropzoneCore.dropzone.files.length > 1) {
                     alert("Max File Count exceed!!!");
                     this.$refs.dropzoneCore.removeFile(file);
                 } else {
                     this.dropzoneStatus.fileCount++;
+	                this.progressbarOption.status = 'ready';
                 }
             },
             removeFileEvent() {
-                this.dropzoneStatus.fileCount = this.$refs.dropzoneCore.dropzone.files.length;
+             
+	            this.resetDropzone();
             },
-            processQueue() {
-                this.$refs.dropzoneCore.processQueue();
-            }
+			clickUploadEvent() {
+            	this.progressbarOption.status = "uploading";
+				this.$refs.dropzoneCore.processQueue();
+			},
+			totalProgressEvent(totaluploadprogress, totalBytes, totalBytesSent) {
+            	this.progressbarOption.value = totaluploadprogress;
+            	if(this.progressbarOption.value === 100) {
+            		this.progressbarOption.status = 'saving'
+	            }
+			},
+ 			queueCompleteEvent(file, xhr, formData) {
+			},
+			resetDropzone() {
+				this.$refs.dropzoneCore.removeAllFiles();
+				this.dropzoneStatus.fileCount = 0;
+            	this.progressbarOption.status = 'hide';
+            	this.progressbarOption.value = 0;
+			},
+			dropzoneErrorEvent(file, message, xhr) {
+            	alert(message);
+            	this.resetDropzone();
+			},
+			clickUloadAnotherEvent() {
+            	this.resetDropzone();
+			}
 		}
 	}
 </script>
@@ -104,7 +172,7 @@
     .dropzone-wrapper {
         margin: 50px 20px 10px 20px;
         padding: 20px;
-        width: 350px;
+	    min-width: 600px;
         height: 350px;
         background-color: #ffcd00;
         border-radius: 10px;
@@ -118,6 +186,17 @@
         border-radius: 10px;
         display: flex;
         justify-content: center;
+		
+		&-success {
+			background-color: #ffffff;
+			width: 100%;
+			height: 100%;
+			padding: 0px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
     }
     .sol-drop-zone.remove-message  {
         .dz-message {
@@ -133,5 +212,13 @@
     }
     .sol-dropzone-preview {
         margin: auto;
+    }
+    .upload-btn {
+	    background-color: #ffcd00;
+	    width: 100px;
+    }
+    .upload-another-file-btn {
+	    background-color: #ffcd00;
+	    width: 200px;
     }
 </style>
