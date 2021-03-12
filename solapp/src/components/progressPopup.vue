@@ -116,9 +116,10 @@ export default {
 <style lang="scss">
 .progress-wrapper {
 	position: relative;
+	margin-top: 10px;
 }
 .md-progress-bar {
-	height: 20px;
+	height: 20px !important;
 }
 .progress-percent {
 	position: absolute;
