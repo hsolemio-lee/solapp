@@ -38,11 +38,12 @@
 </template>
 <script>
 	import vueDropzone from 'vue2-dropzone';
-	import progressPopup from "./progressPopup";
+	import progressPopup from "./SolProgress";
+    import SolProgress from "./SolProgress";
 
 	export default {
 		name: 'SolDropzone',
-		components: {vueDropzone, progressPopup},
+		components: {SolProgress, vueDropzone, progressPopup},
 		props: {
             acceptedFiles: {
                 type: [String, Array],
@@ -229,7 +230,6 @@
 	<div class="sol-drop-zone-main">
 		<div class="dropzone-wrapper">
 			<vue-dropzone v-show="showDropzone"
-				          id="upload"
 			              ref="dropzoneCore"
 			              :class="dropzoneClass"
 			              :options="config"
@@ -256,7 +256,7 @@
 				:disabled="isDisableUploadBtn"
 			>Upload</md-button>
 		</div>
-		<progress-popup
+		<sol-progress
 			:status="progressbarOption.status"
 			:value="progressbarOption.value"
 			:report="report"
@@ -265,11 +265,11 @@
 </template>
 <script>
 	import vueDropzone from 'vue2-dropzone';
-	import progressPopup from "./progressPopup";
+	import SolProgress from "./SolProgress";
 
 	export default {
 		name: 'SolDropzone',
-		components: {vueDropzone, progressPopup},
+		components: {vueDropzone, SolProgress},
 		props: {
             acceptedFiles: {
                 type: [String, Array],
@@ -374,10 +374,14 @@
 				this.$refs.dropzoneCore.processQueue();
 			},
 			totalProgressEvent(totaluploadprogress, totalBytes, totalBytesSent) {
-            	this.progressbarOption.value = totaluploadprogress;
-            	if(this.progressbarOption.value === 100) {
-            		this.progressbarOption.status = 'saving'
-	            }
+                this.progressbarOption.value = totaluploadprogress;
+
+                setTimeout(()=>{
+                    if(this.progressbarOption.value === 100) {
+                        this.progressbarOption.status = 'saving'
+                    }
+                }, 1000);
+
 			},
  			queueCompleteEvent(file, xhr, formData) {
 			},

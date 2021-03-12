@@ -38,7 +38,7 @@
 
 
 export default {
-	name: 'progressPopup',
+	name: 'SolProgress',
 	props: {
 		status: {
 			type: [String],
