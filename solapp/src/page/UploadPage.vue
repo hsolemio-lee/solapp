@@ -2,10 +2,9 @@
 	<div class="upload-page">
 		<sol-dropzone
             ref="solDropzone"
-            :acceptedFiles="'.csv'"
+            :acceptedFiles="acceptedFiles"
             :maxFiles="1"
         />
-        <md-button @click="clickUploadEvent">Upload</md-button>
 	</div>
 </template>
 <script>
@@ -20,16 +19,17 @@ export default {
 	},
 	data() {
 		return {
-		
+			acceptedFiles: '.csv',
 		}
 	},
 	created() {
 	
 	},
+	computed: {
+	
+	},
 	methods: {
-        clickUploadEvent() {
-            this.$refs.solDropzone.processQueue();
-        }
+ 
 	}
 }
 </script>
