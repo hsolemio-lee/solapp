@@ -16,12 +16,15 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -74,6 +77,57 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public ResponseBodyEmitter createUsersEmitter(MultipartFile file) {
+        if(!CSVUtil.hasCSVFormat(file)) {
+            throw new ServiceException(ErrorCode.INVALID_CSV_FILE);
+        }
+        Map<Boolean, List<User>> partitionedUsers;
+
+        try {
+            partitionedUsers = CSVUtil.convertCsvToEntity(file.getInputStream(), convertUser, validationRule);
+        } catch (IOException e) {
+            log.error("CSV file error");
+            throw new ServiceException(ErrorCode.CSV_PARSE_ERROR);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ServiceException(ErrorCode.UNKNOWN_ERROR);
+        }
+        List<User> users = partitionedUsers.get(true);
+        ResponseBodyEmitter emitter = new ResponseBodyEmitter();
+
+        ExecutorService executer = Executors.newSingleThreadExecutor();
+
+        long failedCount = partitionedUsers.get(false).size();
+        long totalCount = partitionedUsers.get(true).size() + partitionedUsers.get(false).size();
+        InsertUserReportDTO report = InsertUserReportDTO
+                .builder()
+                .totalCount(totalCount)
+                .insertedCount(0L)
+                .updatedCount(0L)
+                .failedCount(failedCount)
+                .build();
+
+        executer.execute(() -> {
+            users.stream().forEach(user -> {
+                try {
+                    user = userRepository.save(user);
+                    if(null == user.getCreateDate()) {
+                        report.setUpdatedCount(report.getUpdatedCount()+1);
+                    } else {
+                        report.setInsertedCount(report.getInsertedCount()+1);
+                    }
+                    emitter.send(report);
+                } catch (Exception e) {
+                    emitter.completeWithError(e);
+                }
+            });
+            emitter.complete();
+        });
+        executer.shutdown();
+        return emitter;
+    }
+
     private final Function<CSVRecord, User> convertUser = record -> User.builder()
             .id("".equals(record.get(HEADER[0])) ? 0L : Long.parseLong(record.get(HEADER[0])))
             .firstName(Optional.ofNullable(record.get(HEADER[1])).orElse(""))
@@ -86,4 +140,12 @@ public class UserServiceImpl implements UserService {
             && !ValidateUtil.isEmpty(user.getLastName())
             && !ValidateUtil.isEmpty(user.getEmail())
             && ValidateUtil.isValidEmail(user.getEmail());
+
+    private void randomDelay() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }

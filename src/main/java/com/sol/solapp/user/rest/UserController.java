@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.validation.Valid;
 
@@ -41,5 +42,12 @@ public class UserController {
     public ResponseEntity<InsertUserReportDTO> uploadUsers(@RequestParam("file") MultipartFile file) {
         log.debug("[POST] /users/upload # Create new users");
         return ResponseEntity.ok(userService.createUsers(file));
+    }
+
+    @ApiOperation(httpMethod = "POST", value = "user csv 업로드", produces = "application/json", consumes = "application/json")
+    @PostMapping("/upload/emitter")
+    public ResponseBodyEmitter uploadUsersEmitter(@RequestParam("file") MultipartFile file) {
+        log.debug("[POST] /users/upload # Create new users");
+        return userService.createUsersEmitter(file);
     }
 }

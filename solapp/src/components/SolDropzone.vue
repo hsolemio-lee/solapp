@@ -2,7 +2,6 @@
 	<div class="sol-drop-zone-main">
 		<div class="dropzone-wrapper">
 			<vue-dropzone v-show="showDropzone"
-				          id="upload"
 			              ref="dropzoneCore"
 			              :class="dropzoneClass"
 			              :options="config"
@@ -56,7 +55,7 @@
 		data() {
 			return {
 				config: {
-					url: `${this.$http.defaults.baseUrl}/rest/v1/users/upload`,
+					url: `${this.$http.defaults.baseUrl}/rest/v1/users/upload/emitter`,
 					headers: {
 						'Cache-Control': '',
 						'X-Requested-With': '',
@@ -94,15 +93,14 @@
 		        return this.progressbarOption.status !== 'ready';
 	        },
 	        showDropzone() {
-		    	console.log(this.progressbarOption.status);
-		    	return this.progressbarOption.status !== 'complete';
+                return this.progressbarOption.status !== 'complete';
 	        }
         },
-		created() {
+        created() {
             this.config.maxFiles = this.maxFiles;
             this.config.acceptedFiles = this.acceptedFiles;
-		},
-		methods: {
+        },
+        methods: {
             fileTemplate() {
                 return `<div class="dz-preview dz-file-preview sol-dropzone-preview">
                           <div class="dz-image">
@@ -117,56 +115,56 @@
                           <div class="dz-success-mark"><i class="fa fa-check"></i></div>
                           <div class="dz-error-mark"><i class="fa fa-close"></i></div>
                         </div>
-`;
+                `;
             },
-			successEvent(file, res) {
-				this.report.insertedCount = res.insertedCount;
-				this.report.updatedCount = res.updatedCount;
-				this.report.failedCount = res.failedCount;
-				this.report.totalCount = res.totalCount;
-				this.progressbarOption.status = 'complete';
-			},
+            successEvent(file, res) {
+                this.report.insertedCount = res.insertedCount;
+                this.report.updatedCount = res.updatedCount;
+                this.report.failedCount = res.failedCount;
+                this.report.totalCount = res.totalCount;
+                this.progressbarOption.status = 'complete';
+            },
             fileAddedEvent(file) {
                 if(this.$refs.dropzoneCore.dropzone.files.length > 1) {
                     this.$refs.dropzoneCore.removeFile(file);
                 } else {
                     this.dropzoneStatus.fileCount++;
-	                this.progressbarOption.status = 'ready';
+                    this.progressbarOption.status = 'ready';
                 }
             },
             removeFileEvent() {
-            	const length = this.$refs.dropzoneCore.dropzone.files.length;
-            	if(length === 0) {
-            		this.resetDropzone();
-	            } else {
-		            this.dropzoneStatus.fileCount = length;
-	            }
+                const length = this.$refs.dropzoneCore.dropzone.files.length;
+                if(length === 0) {
+                    this.resetDropzone();
+                } else {
+                    this.dropzoneStatus.fileCount = length;
+                }
             },
-			clickUploadEvent() {
-            	this.progressbarOption.status = "uploading";
-				this.$refs.dropzoneCore.processQueue();
-			},
-			totalProgressEvent(totaluploadprogress, totalBytes, totalBytesSent) {
-            	this.progressbarOption.value = totaluploadprogress;
-            	if(this.progressbarOption.value === 100) {
-            		this.progressbarOption.status = 'saving'
-	            }
-			},
- 			queueCompleteEvent(file, xhr, formData) {
-			},
-			resetDropzone() {
-				this.$refs.dropzoneCore.removeAllFiles();
-				this.dropzoneStatus.fileCount = 0;
-            	this.progressbarOption.status = 'hide';
-            	this.progressbarOption.value = 0;
-			},
-			dropzoneErrorEvent(file, message, xhr) {
-            	alert(message);
-            	this.$refs.dropzoneCore.removeFile(file);
-			},
-			clickUloadAnotherEvent() {
-            	this.resetDropzone();
-			}
+            clickUploadEvent() {
+                this.progressbarOption.status = "uploading";
+                this.$refs.dropzoneCore.processQueue();
+            },
+            totalProgressEvent(totaluploadprogress, totalBytes, totalBytesSent) {
+                this.progressbarOption.value = totaluploadprogress;
+                if(this.progressbarOption.value === 100) {
+                    this.progressbarOption.status = 'saving'
+                }
+            },
+            queueCompleteEvent(file, xhr, formData) {
+            },
+            resetDropzone() {
+                this.$refs.dropzoneCore.removeAllFiles();
+                this.dropzoneStatus.fileCount = 0;
+                this.progressbarOption.status = 'hide';
+                this.progressbarOption.value = 0;
+            },
+            dropzoneErrorEvent(file, message, xhr) {
+                alert(message);
+                this.$refs.dropzoneCore.removeFile(file);
+            },
+            clickUloadAnotherEvent() {
+                this.resetDropzone();
+            }
 		}
 	}
 </script>
@@ -283,7 +281,7 @@
 		data() {
 			return {
 				config: {
-					url: `${this.$http.defaults.baseUrl}/rest/v1/users/upload`,
+					url: `${this.$http.defaults.baseUrl}/rest/v1/users/upload/emitter`,
 					headers: {
 						'Cache-Control': '',
 						'X-Requested-With': '',
@@ -328,6 +326,16 @@
 		created() {
             this.config.maxFiles = this.maxFiles;
             this.config.acceptedFiles = this.acceptedFiles;
+            let source = new EventSource(`${this.$http.defaults.baseUrl}/rest/v1/users/upload/emitter`);
+            source.onmessage = function(event) {
+                const res = event.data;
+                console.log(res);
+                this.report.insertedCount = res.insertedCount;
+                this.report.updatedCount = res.updatedCount;
+                this.report.failedCount = res.failedCount;
+                this.report.totalCount = res.totalCount;
+                this.progressbarOption.status = 'complete';
+            };
 		},
 		methods: {
             fileTemplate() {
@@ -347,6 +355,7 @@
 `;
             },
 			successEvent(file, res) {
+                console.log(res);
 				this.report.insertedCount = res.insertedCount;
 				this.report.updatedCount = res.updatedCount;
 				this.report.failedCount = res.failedCount;
