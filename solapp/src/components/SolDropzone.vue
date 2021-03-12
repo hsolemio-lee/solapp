@@ -128,7 +128,6 @@
 			},
             fileAddedEvent(file) {
                 if(this.$refs.dropzoneCore.dropzone.files.length > 1) {
-                    alert("Max File Count exceed!!!");
                     this.$refs.dropzoneCore.removeFile(file);
                 } else {
                     this.dropzoneStatus.fileCount++;
@@ -136,8 +135,12 @@
                 }
             },
             removeFileEvent() {
-             
-	            this.resetDropzone();
+            	const length = this.$refs.dropzoneCore.dropzone.files.length;
+            	if(length === 0) {
+            		this.resetDropzone();
+	            } else {
+		            this.dropzoneStatus.fileCount = length;
+	            }
             },
 			clickUploadEvent() {
             	this.progressbarOption.status = "uploading";
@@ -159,7 +162,7 @@
 			},
 			dropzoneErrorEvent(file, message, xhr) {
             	alert(message);
-            	this.resetDropzone();
+            	this.$refs.dropzoneCore.removeFile(file);
 			},
 			clickUloadAnotherEvent() {
             	this.resetDropzone();
