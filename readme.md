@@ -53,7 +53,7 @@ $ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar
 ### 필수사항
 - 대량 파일(CSV 10만건 이상) 업로드를 통한 Data 저장 기능 구현
   - Drag & Drop 으로 10만건 이상 CSV 파일 업로드.
-  - 업로드된 파일을 데이터베이서에 insert하고 진행상태 progress bar로 상태 표시
+  - 업로드된 파일을 데이터베이스에 insert하고 진행상태 progress bar로 상태 표시
 
 ## 개발 제약사항
 ### 필수사항
