@@ -37,18 +37,20 @@ public class ExceptionHandlingController {
         return responseMap;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ServiceException.class)
     public Map<String, List<Map<String, Object>>> serviceException(ServiceException ex) {
         ErrorDescription errorDescription = ex.getErrorDescription();
         return responseFormat(errorDescription, ex);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public Map<String, List<Map<String, Object>>> constraintException(BindException ex) {
         return responseFormat(ex.getFieldErrors());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public Map<String, List<Map<String, Object>>> unknownException(Exception ex) {
         ErrorDescription errorDescription = new ErrorDescription(ErrorCode.UNKNOWN_ERROR.getCode(), ex.getMessage());

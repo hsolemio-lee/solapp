@@ -3,6 +3,7 @@ package com.sol.solapp.user.entity;
 import com.sol.solapp.common.entity.BaseEntity;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -17,16 +18,17 @@ import java.util.Date;
 public class User extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="idGenerator")
+    @GenericGenerator(name="idGenerator", strategy="com.sol.solapp.common.util.IdGenerator")
     private Long id;
 
     @Column(name = "first_name", length=50, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", length=50, nullable = true)
+    @Column(name = "last_name", length=50, nullable = false)
     private String lastName;
 
-    @Column(name = "email", length=100, nullable = true)
+    @Column(name = "email", length=100, nullable = false)
     private String email;
 
     @Builder
