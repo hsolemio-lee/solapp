@@ -188,9 +188,9 @@ page (integer)
 
 ### UI 매뉴얼
 
-> 서버 기동 후 http://localhost:8080 접속
-> 파일을 drag&drop 혹은 dropzone(테두리안)을 클릭하여 파일 업로드 준비
-> 하나의 파일만 업로드할 수 있다.
-> 아래 UPLOAD 버튼 클릭
-> 업로드 성공 후 저장된 row 수, 업데이트된 row 수, 실패한 row 수, 전체 row 수 확인 가능
+> - 서버 기동 후 http://localhost:8080 접속
+> - 파일을 drag&drop 혹은 dropzone(테두리안)을 클릭하여 파일 업로드 준비
+> - 하나의 파일만 업로드할 수 있다.
+> - 아래 UPLOAD 버튼 클릭
+> - 업로드 성공 후 저장된 row 수, 업데이트된 row 수, 실패한 row 수, 전체 row 수 확인 가능
 
