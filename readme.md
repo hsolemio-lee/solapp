@@ -35,10 +35,16 @@
 $ git clone https://github.com/hsolemio-lee/kakaopay-test-project.git
 $ cd solapp
 $ npm install 
-$ npm run build //UI 번들링
+
+//UI 번들링
+$ npm run build 
 $ cd ../
-$ ./gradlew bootjar //jar 빌드
-$ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar //jar 실행
+
+//jar 빌드
+$ ./gradlew bootjar 
+
+//jar 실행
+$ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar 
 ```
 
 - 접속 Base URI: `http://localhost:8080`
