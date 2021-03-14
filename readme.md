@@ -4,7 +4,7 @@
 - [빌드 및 실행하기](#빌드-및-실행하기)
 - [기능 요구사항](#기능-요구사항)
 - [개발 제약사항](#개발-제약사항)
-- [해결방법](#해결방법)
+- [주요기능](#주요기능)
 
 ---
 
@@ -59,8 +59,23 @@ $ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar //jar 실행
 ### 선택사항
 - core ui, dropzone 등의 UI Component 사용은 선택사항
    
-## 해결방법
-### 1. 데이터 파일(`.csv`)에서 각 레코드를 데이터베이스에 저장하는 API 개발
+## 주요기능
+### API Spec
+1.[POST] CSV 파일 업로드 저장 
+#### URL: 
+http://localhost:8080/rest/v1/users
+#### Parameter
+file
+(formData)
+#### Response Body
+```json
+{
+    "insertedCount": 99563,
+    "updatedCount": 0,
+    "failedCount": 437,
+    "totalCount": 100000
+}
+```
 
 
 
