@@ -15,7 +15,7 @@
     - GIT
 - Back-end
     - Java8
-    - Spring Boot 2.2.2
+    - Spring Boot 2.4.3
     - JPA
     - H2
     - Gradle
