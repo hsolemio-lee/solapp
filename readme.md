@@ -63,10 +63,9 @@ $ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar //jar 실행
 ### API Spec
 1.[POST] CSV 파일 업로드 저장 
 #### URL: 
-http://localhost:8080/rest/v1/users
+http://localhost:8080/rest/v1/users/upload
 #### Parameter
-file
-(formData)
+file (formData)
 #### Response Body
 ```json
 {
@@ -74,6 +73,105 @@ file
     "updatedCount": 0,
     "failedCount": 437,
     "totalCount": 100000
+}
+```
+
+1.[GET] User 페이징 조회
+#### URL: 
+http://localhost:8080/rest/v1/users
+#### Parameter
+size (integer)
+page (integer)
+#### Response Body
+```json
+{
+    "content": [
+        {
+            "id": 110,
+            "firstName": "Jobi",
+            "lastName": "Bartlett",
+            "email": "Jobi.Bartlett@yopmail.com"
+        },
+        {
+            "id": 111,
+            "firstName": "Delilah",
+            "lastName": "Sikorski",
+            "email": "Delilah.Sikorski@yopmail.com"
+        },
+        {
+            "id": 112,
+            "firstName": "Brooks",
+            "lastName": "Poppy",
+            "email": "Brooks.Poppy@yopmail.com"
+        },
+        {
+            "id": 113,
+            "firstName": "Lory",
+            "lastName": "Schwejda",
+            "email": "Lory.Schwejda@yopmail.com"
+        },
+        {
+            "id": 114,
+            "firstName": "Blake",
+            "lastName": "Alwin",
+            "email": "Blake.Alwin@yopmail.com"
+        },
+        {
+            "id": 115,
+            "firstName": "Ericka",
+            "lastName": "Blake",
+            "email": "Ericka.Blake@yopmail.com"
+        },
+        {
+            "id": 116,
+            "firstName": "Florie",
+            "lastName": "Linehan",
+            "email": "Florie.Linehan@yopmail.com"
+        },
+        {
+            "id": 117,
+            "firstName": "Michaelina",
+            "lastName": "Llovera",
+            "email": "Michaelina.Llovera@yopmail.com"
+        },
+        {
+            "id": 118,
+            "firstName": "Fred",
+            "lastName": "Pauly",
+            "email": "Fred.Pauly@yopmail.com"
+        },
+        {
+            "id": 119,
+            "firstName": "Corry",
+            "lastName": "Holbrook",
+            "email": "Corry.Holbrook@yopmail.com"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+        },
+        "offset": 10,
+        "pageNumber": 1,
+        "pageSize": 10,
+        "unpaged": false,
+        "paged": true
+    },
+    "totalElements": 99563,
+    "last": false,
+    "totalPages": 9957,
+    "number": 1,
+    "size": 10,
+    "sort": {
+        "sorted": false,
+        "unsorted": true,
+        "empty": true
+    },
+    "numberOfElements": 10,
+    "first": false,
+    "empty": false
 }
 ```
 
