@@ -61,7 +61,7 @@ $ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar //jar 실행
    
 ## 주요기능
 ### API Spec
-1.[POST] CSV 파일 업로드 저장 
+1. [POST] CSV 파일 업로드 저장 
 #### URL: 
 http://localhost:8080/rest/v1/users/upload
 #### Parameter
@@ -76,7 +76,7 @@ file (formData)
 }
 ```
 
-1.[GET] User 페이징 조회
+2. [GET] User 페이징 조회
 #### URL: 
 http://localhost:8080/rest/v1/users
 #### Parameter
@@ -175,5 +175,6 @@ page (integer)
 }
 ```
 
+### UI 매뉴얼
 
 
