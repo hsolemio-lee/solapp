@@ -75,6 +75,11 @@ file (formData)
     "totalCount": 100000
 }
 ```
+#### Description
+- 알맞은 포맷(id,firstname,lastname,email)의 .csv 파일  업로드하여야한다.
+- 모든 컬럼이 필수값이며 하나라도 비어있다면 해당 row를 저장하지 않고 failedCount가 증가한다.
+- 이미 존재하는 ID라면 업데이트를 한다.
+- Email 컬림이 Email 포맷에 맞지 않으면 해당 row를 저장하지 않고 failedCount가 추가된다.
 
 #### 2. [GET] User 페이징 조회
 ##### URL: 
@@ -177,4 +182,9 @@ page (integer)
 
 ### UI 매뉴얼
 
+> 서버 기동 후 http://localhost:8080 접속
+> 파일을 drag&drop 혹은 dropzone(테두리안)을 클릭하여 파일 업로드 준비
+> 하나의 파일만 업로드할 수 있다.
+> 아래 UPLOAD 버튼 클릭
+> 업로드 성공 후 저장된 row 수, 업데이트된 row 수, 실패한 row 수, 전체 row 수 확인 가능
 
