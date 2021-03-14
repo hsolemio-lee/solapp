@@ -8,12 +8,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/rest/v1/users")
@@ -41,5 +44,12 @@ public class UserController {
     public ResponseEntity<InsertUserReportDTO> uploadUsers(@RequestParam("file") MultipartFile file) {
         log.debug("[POST] /users/upload # Create new users");
         return ResponseEntity.ok(userService.createUsers(file));
+    }
+
+    @ApiOperation(httpMethod = "GET", value = "user 조회", produces = "application/json", consumes = "application/json")
+    @GetMapping
+    public ResponseEntity<Page<UserDTO>> getUsers(Pageable pageable) {
+        log.debug("[GET] /users # Get Users");
+        return ResponseEntity.ok(userService.getUsers(pageable));
     }
 }

@@ -13,6 +13,9 @@ import com.sol.solapp.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,6 +75,14 @@ public class UserServiceImpl implements UserService {
                 .insertedCount(insertedCount)
                 .totalCount(totalCount)
                 .build();
+    }
+
+    @Override
+    public Page<UserDTO> getUsers(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        long totalCount = users.getTotalElements();
+
+        return new PageImpl<UserDTO>(users.getContent().stream().map(UserConverter.INSTANCE::toDto).collect(Collectors.toList()), pageable, totalCount);
     }
 
     private final Function<CSVRecord, User> convertUser = record -> User.builder()

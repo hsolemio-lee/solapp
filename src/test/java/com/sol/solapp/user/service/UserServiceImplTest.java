@@ -14,6 +14,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -164,6 +168,20 @@ public class UserServiceImplTest {
         assertThat(result).hasFieldOrPropertyWithValue("updatedCount", 1L);
         assertThat(result).hasFieldOrPropertyWithValue("failedCount", 1L);
         assertThat(result).hasFieldOrPropertyWithValue("totalCount", 4L);
+    }
+
+    @Test
+    public void whenCallGetUsers() {
+        List<User> savedUsers = getMockUserList(4);
+        Page<User> userPage = new PageImpl<>(savedUsers, PageRequest.of(1, 4), 200L);
+        when(mockUserRepository.findAll(any(Pageable.class))).thenReturn(userPage);
+
+        Page<UserDTO> result = userService.getUsers(PageRequest.of(1, 4));
+
+        verify(mockUserRepository, times(1)).findAll(any(Pageable.class));
+
+        assertThat(result.getTotalElements()).isEqualTo(200L);
+        assertThat(result.getContent()).hasSize(4);
     }
 
 }

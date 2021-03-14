@@ -1,6 +1,6 @@
 <template>
 	<div class="progress-wrapper" v-show="isShow">
-		<md-progress-bar v-if="showProgressingBar"
+		<md-progress-bar class="sol-progress-bar" v-if="showProgressingBar"
 			:md-mode="getMode"
 			:md-value="value"
 		/>
