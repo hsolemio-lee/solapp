@@ -12,6 +12,9 @@ public enum ErrorCode {
     INVALID_CSV_FILE("SOL400-004", "Invalid CSV file"),
     CSV_PARSE_ERROR("SOL400-005", "CSV Parsing Error"),
     UNKNOWN_ERROR("SOL500-001", "Unknown error"),
+    UNAUTHORIZED("SOL401-001", "Unauthorized"),
+    FORBIDDEN("SOL403-001", "Forbidden"),
+    USER_NOT_FOUND("SOL404-001", "User Not Found")
     ;
 
     private String code;

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import javax.validation.constraints.NotNull;
 public class UserController {
 
     private final UserService userService;
+
 
     @InitBinder("userDTO")
     protected void initBinder(WebDataBinder binder) {
@@ -52,4 +54,6 @@ public class UserController {
         log.debug("[GET] /users # Get Users");
         return ResponseEntity.ok(userService.getUsers(pageable));
     }
+
+
 }

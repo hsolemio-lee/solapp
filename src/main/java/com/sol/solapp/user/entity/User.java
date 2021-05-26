@@ -1,12 +1,10 @@
 package com.sol.solapp.user.entity;
 
 import com.sol.solapp.common.entity.BaseEntity;
-import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Date;
 
 @Getter
@@ -22,21 +20,39 @@ public class User extends BaseEntity {
     @GenericGenerator(name="idGenerator", strategy="com.sol.solapp.common.util.IdGenerator")
     private Long id;
 
-    @Column(name = "first_name", length=50, nullable = false)
+    @Column(name = "password", length=200, nullable = false)
+    private String password;
+
+    @Column(name = "user_name", length=50, nullable = false)
+    private String username;
+
+    @Column(name = "first_name", length=50, nullable = true)
     private String firstName;
 
-    @Column(name = "last_name", length=50, nullable = false)
+    @Column(name = "last_name", length=50, nullable = true)
     private String lastName;
 
     @Column(name = "email", length=100, nullable = false)
     private String email;
 
+    @Column(name = "role", length=50, nullable = false)
+    private String role;
+
+    private String provider;
+
+    private String providerId;
+
     @Builder
-    public User(Date createdTimestamp, Date lastModifiedTimestamp, Long id, String firstName, String lastName, String email) {
-        super(createdTimestamp, lastModifiedTimestamp);
+    public User(Date createDate, Date updateDate, Long id, String password, String username, String firstName, String lastName, String email, String role, String provider, String providerId) {
+        super(createDate, updateDate);
         this.id = id;
+        this.password = password;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 }

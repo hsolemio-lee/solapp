@@ -15,4 +15,6 @@ public interface UserService {
     InsertUserReportDTO createUsers(MultipartFile file);
 
     Page<UserDTO> getUsers(Pageable pageable);
+
+    UserDTO joinUser(UserDTO user);
 }

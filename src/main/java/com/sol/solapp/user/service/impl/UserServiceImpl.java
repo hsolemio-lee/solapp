@@ -16,6 +16,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final String[] HEADER = { "id", "firstname", "lastname", "email" };
 
@@ -83,6 +86,17 @@ public class UserServiceImpl implements UserService {
         long totalCount = users.getTotalElements();
 
         return new PageImpl<UserDTO>(users.getContent().stream().map(UserConverter.INSTANCE::toDto).collect(Collectors.toList()), pageable, totalCount);
+    }
+
+    @Override
+    public UserDTO joinUser(UserDTO dto) {
+        User user = UserConverter.INSTANCE.toEntity(dto);
+        String rawPassword = user.getPassword();
+        String encodedPassword = bCryptPasswordEncoder.encode(rawPassword);
+        user.setPassword(encodedPassword);
+        user.setRole("ROLE_USER");
+        userRepository.save(user);
+        return null;
     }
 
     private final Function<CSVRecord, User> convertUser = record -> User.builder()
