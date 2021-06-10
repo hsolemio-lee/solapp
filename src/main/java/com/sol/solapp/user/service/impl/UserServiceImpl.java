@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    public static final String ROLE_USER = "ROLE_USER";
+
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -94,7 +96,7 @@ public class UserServiceImpl implements UserService {
         String rawPassword = user.getPassword();
         String encodedPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
-        user.setRole("ROLE_USER");
+        user.setRole(ROLE_USER);
         userRepository.save(user);
         return null;
     }

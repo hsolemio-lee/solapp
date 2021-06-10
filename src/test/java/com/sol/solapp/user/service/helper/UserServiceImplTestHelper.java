@@ -28,8 +28,8 @@ public class UserServiceImplTestHelper {
                 .firstName("sol")
                 .lastName("lee")
                 .email("test"+id+"@test.com")
-                .createdTimestamp(new Date())
-                .lastModifiedTimestamp(new Date())
+                .createDate(new Date())
+                .updateDate(new Date())
                 .build();
     }
 

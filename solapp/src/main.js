@@ -6,7 +6,7 @@ import router from './router'
 
 import { solAxios } from '@/config/axios/solAxios';
 
-import { MdButton, MdContent, MdTabs, MdProgress } from 'vue-material/dist/components'
+import { MdButton, MdContent, MdTabs, MdProgress, MdField} from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
@@ -14,6 +14,7 @@ Vue.use(MdButton);
 Vue.use(MdContent);
 Vue.use(MdTabs);
 Vue.use(MdProgress);
+Vue.use(MdField);
 
 Vue.prototype.$http = solAxios;
 
