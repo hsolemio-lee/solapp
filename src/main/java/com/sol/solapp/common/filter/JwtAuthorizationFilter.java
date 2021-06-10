@@ -6,6 +6,7 @@ import com.sol.solapp.common.auth.PrincipalDetails;
 import com.sol.solapp.user.entity.User;
 import com.sol.solapp.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,14 +27,14 @@ import static com.sol.solapp.common.JwtProperties.TOKEN_PREFIX;
 // 만약에 권한이 인증이 필요한 주소가 아니라면 이 필터를 안탐
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    @Value("${jwt.token.code}")
-    private String JWT_CODE;
-
     private final UserRepository userRepository;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    private final Environment env;
+
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, Environment env) {
         super(authenticationManager);
         this.userRepository = userRepository;
+        this.env = env;
     }
 
     //인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 될 것
@@ -51,7 +52,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //JWT 토큰 검증 후 정상적인 사용자인지 확인
         String jwtToken = jwtHeader.replace(TOKEN_PREFIX, "");
 
-        String username = JWT.require(Algorithm.HMAC512(JWT_CODE))
+        String username = JWT.require(Algorithm.HMAC512(env.getProperty("jwt.token.code")))
                 .build()
                 .verify(jwtToken)
                 .getClaim("username").asString();

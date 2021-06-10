@@ -8,6 +8,7 @@ import com.sol.solapp.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,11 +28,10 @@ import static com.sol.solapp.common.JwtProperties.*;
 @RequiredArgsConstructor
 public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter {
 
-    @Value("${jwt.token.code}")
-    private String JWT_CODE;
-
-
     private final AuthenticationManager authenticationManager;
+
+    private final Environment env;
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -62,7 +62,7 @@ public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.debug("Authentication Success!!!");
-        log.debug("==============JWT_CODE: "+JWT_CODE);
+        log.debug("==============JWT_CODE: "+env.getProperty("jwt.token.code"));
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         String jwtToken = JWT.create()
@@ -70,7 +70,7 @@ public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter 
                 .withExpiresAt(new Date(System.currentTimeMillis()+EXPIRE_TIME))
                 .withClaim("username", principalDetails.getUser().getUsername())
                 .withClaim("password", principalDetails.getUser().getPassword())
-                .sign(Algorithm.HMAC512(JWT_CODE));
+                .sign(Algorithm.HMAC512(env.getProperty("jwt.token.code")));
 
         response.addHeader(AUTH_HEADER, TOKEN_PREFIX +jwtToken);
     }

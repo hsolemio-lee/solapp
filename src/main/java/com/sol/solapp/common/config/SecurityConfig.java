@@ -8,6 +8,7 @@ import com.sol.solapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -29,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserRepository userRepository;
 
+    private final Environment env;
+
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
@@ -47,8 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .addFilter(new JwtAuthenticateFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
+                .addFilter(new JwtAuthenticateFilter(authenticationManager(), env))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, env))
                 .authorizeRequests()
                 .antMatchers("/rest/v1/**")
                 .access("hasRole('ROLE_USER')")
