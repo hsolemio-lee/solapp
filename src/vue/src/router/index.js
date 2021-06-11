@@ -41,7 +41,7 @@ const routes = [
     name: "smartthings",
     beforeEnter: authUser,
     component: () =>
-      import(/* webpackChunkName: "Home" */ "../views/SmartThings.vue"),
+      import(/* webpackChunkName: "Smartthings" */ "../views/SmartThings.vue"),
   },
 ];
 

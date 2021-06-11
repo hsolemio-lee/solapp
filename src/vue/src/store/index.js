@@ -60,7 +60,7 @@ export default new Vuex.Store({
           email: loginInfo.email,
         };
         commit('loginSuccess', userInfo);
-        smartThingsAxios.defaults.headers.common['Authorization'] = loginInfo.smartThingsToken;
+        smartThingsAxios.defaults.headers.common['Authorization'] = "Bearer "+loginInfo.smartThingsToken;
         router.push({name: 'home'});
       })
       .catch(error => {

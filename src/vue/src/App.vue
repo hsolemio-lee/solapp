@@ -4,25 +4,17 @@
       v-model="drawer"
       app
     >
-      <!--  -->
       <v-list dense>
         <v-list-item router :to="{name: 'home'}">
-          <!-- <v-list-item-action>
-            <v-icon>home</v-icon>
-          </v-list-item-action> -->
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item router :to="{name: 'smartthings'}">
-          <!-- <v-list-item-action>
-            <v-icon>home</v-icon>
-          </v-list-item-action> -->
           <v-list-item-content>
             <v-list-item-title>Smart Things</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
       </v-list> 
     </v-navigation-drawer>
 

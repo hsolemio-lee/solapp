@@ -6,7 +6,7 @@
 import Welcome from "../components/Welcome";
 
 export default {
-  name: "Home",
+  name: "home",
 
   components: {
     Welcome,
