@@ -15,7 +15,7 @@
     - GIT
 - Back-end
     - Java8
-    - Spring Boot 2.2.2
+    - Spring Boot 2.4.3
     - JPA
     - H2
     - Gradle
@@ -53,7 +53,7 @@ $ java -jar ./build/libs/SolApp-0.0.1-SNAPSHOT.jar
 ### 필수사항
 - 대량 파일(CSV 10만건 이상) 업로드를 통한 Data 저장 기능 구현
   - Drag & Drop 으로 10만건 이상 CSV 파일 업로드.
-  - 업로드된 파일을 데이터베이서에 insert하고 진행상태 progress bar로 상태 표시
+  - 업로드된 파일을 데이터베이스에 insert하고 진행상태 progress bar로 상태 표시
 
 ## 개발 제약사항
 ### 필수사항
@@ -194,8 +194,7 @@ page (integer)
 > - 아래 UPLOAD 버튼 클릭
 > - 업로드 성공 후 저장된 row 수, 업데이트된 row 수, 실패한 row 수, 전체 row 수 확인 가능
 
-![kakaopay1](https://user-images.githubusercontent.com/29113342/111062178-b7745400-84ea-11eb-8bc8-ad7badefd308.PNG)
-![kakaopay2](https://user-images.githubusercontent.com/29113342/111062186-c65b0680-84ea-11eb-97ec-fbb0509afba8.PNG)
-![kakaopay3](https://user-images.githubusercontent.com/29113342/111062187-c955f700-84ea-11eb-9541-4c2160b22124.PNG)
-![kakaopay4](https://user-images.githubusercontent.com/29113342/111062189-ca872400-84ea-11eb-8036-7a4a3ed7e535.PNG)
-
+<img src = "https://user-images.githubusercontent.com/29113342/111062178-b7745400-84ea-11eb-8bc8-ad7badefd308.PNG" width="400px">
+<img src = "https://user-images.githubusercontent.com/29113342/111062186-c65b0680-84ea-11eb-97ec-fbb0509afba8.PNG" width="400px">
+<img src = "https://user-images.githubusercontent.com/29113342/111062187-c955f700-84ea-11eb-9541-4c2160b22124.PNG" width="400px">
+<img src = "https://user-images.githubusercontent.com/29113342/111062189-ca872400-84ea-11eb-8036-7a4a3ed7e535.PNG" width="400px">
