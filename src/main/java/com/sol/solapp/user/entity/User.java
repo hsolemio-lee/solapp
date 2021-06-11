@@ -38,12 +38,15 @@ public class User extends BaseEntity {
     @Column(name = "role", length=50, nullable = false)
     private String role;
 
+    @Column(name = "smart_things_token", length=50, nullable = true)
+    private String smartThingsToken;
+
     private String provider;
 
     private String providerId;
 
     @Builder
-    public User(Date createDate, Date updateDate, Long id, String password, String username, String firstName, String lastName, String email, String role, String provider, String providerId) {
+    public User(Date createDate, Date updateDate, Long id, String password, String username, String firstName, String lastName, String email, String role, String smartThingsToken, String provider, String providerId) {
         super(createDate, updateDate);
         this.id = id;
         this.password = password;
@@ -52,6 +55,7 @@ public class User extends BaseEntity {
         this.lastName = lastName;
         this.email = email;
         this.role = role;
+        this.smartThingsToken = smartThingsToken;
         this.provider = provider;
         this.providerId = providerId;
     }

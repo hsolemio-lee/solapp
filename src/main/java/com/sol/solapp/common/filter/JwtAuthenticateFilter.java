@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sol.solapp.common.auth.PrincipalDetails;
+import com.sol.solapp.common.dto.LoginDTO;
 import com.sol.solapp.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.sol.solapp.common.JwtProperties.*;
 
@@ -72,6 +75,20 @@ public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter 
                 .withClaim("password", principalDetails.getUser().getPassword())
                 .sign(Algorithm.HMAC512(env.getProperty("jwt.token.code")));
 
+        LoginDTO loginDTO = LoginDTO.builder()
+                .username(principalDetails.getUser().getUsername())
+                .firstName(principalDetails.getUser().getFirstName())
+                .lastName(principalDetails.getUser().getLastName())
+                .email(principalDetails.getUser().getEmail())
+                .smartThingsToken(principalDetails.getUser().getSmartThingsToken())
+                .authToken(TOKEN_PREFIX +jwtToken)
+                .build();
         response.addHeader(AUTH_HEADER, TOKEN_PREFIX +jwtToken);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        ObjectMapper om = new ObjectMapper();
+        String responseJson = om.writeValueAsString(loginDTO);
+        response.getWriter().write(responseJson);
     }
 }

@@ -17,6 +17,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨
@@ -44,18 +49,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(corsFilter, CsrfFilter.class);
+//        http.addFilterBefore(corsFilter, CsrfFilter.class);
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .addFilter(new JwtAuthenticateFilter(authenticationManager(), env))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, env))
                 .authorizeRequests()
+                .antMatchers("/rest/v1/login/join")
+                .permitAll()
                 .antMatchers("/rest/v1/**")
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll();
 
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:9090", "http://192.168.0.10:8080", "http://hansolo.iptime.org:8080"));
+        configuration.setAllowedHeaders(Arrays.asList("x-requested-with", "origin", "content-type", "accept", "x-xsrf-token", "pd-super-key", "authorization"));
+        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
