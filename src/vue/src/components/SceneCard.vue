@@ -1,9 +1,7 @@
 <template>
     <v-card
-        class="mx-auto"
-        width="344"
-        outlined
-        :key="scene.sceneId"
+        color="#385F73"
+        dark
     >
         <v-list-item three-line>
             <v-list-item-content>
@@ -15,17 +13,25 @@
                 </v-list-item-title>
             </v-list-item-content>
         </v-list-item>
-
         <v-card-actions>
             <v-btn
                 outlined
                 rounded
                 text
+                :loading="buttonLoading"
                 @click="executeScene"
             >
                 Execute
             </v-btn>
         </v-card-actions>
+        <v-snackbar
+            bottom
+            height="80"
+            timeout="2000"
+            v-model="snackbar"
+        >
+            {{ snackbarText }}
+        </v-snackbar>
     </v-card>
 </template>
 <script>
@@ -50,7 +56,10 @@ export default {
             scene : {
                 sceneName: "",
                 sceneId: "",
-            }
+            },
+            snackbar: false,
+            snackbarText: "Execute Success!!",
+            buttonLoading: false,
         }
     },
     created() {
@@ -61,18 +70,25 @@ export default {
     },
     methods: {
         executeScene() {
+            this.buttonLoading = true;
             this.$http.post(`/rest/v1/smartthings/scenes/execute/${this.scene.sceneId}`)
             .then(res => {
+                this.buttonLoading = false;
                 if(res.data.status === 'success') {
-                    alert("Execute success!");
+                    this.showSnackbar("Execute Success!!");
                 } else {
-                    alert("Execute fail!");
+                    this.showSnackbar("Execute Fail!!");
                 }
             })
             .catch(error => {
+                this.buttonLoading = false;
                 console.log(error);
-                alert("Execute fail!");
+                this.showSnackbar("Execute Fail!!");
             });
+        },
+        showSnackbar(text) {
+            this.snackbar = true;
+            this.snackbarText = text;
         }
     }
 }

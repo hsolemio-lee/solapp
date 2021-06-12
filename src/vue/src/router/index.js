@@ -41,7 +41,14 @@ const routes = [
     name: "scenePage",
     beforeEnter: authUser,
     component: () =>
-      import(/* webpackChunkName: "Smartthings" */ "../views/ScenePage.vue"),
+      import(/* webpackChunkName: "ScenePage" */ "../views/ScenePage.vue"),
+  },
+  {
+    path: "/devicePage",
+    name: "devicePage",
+    beforeEnter: authUser,
+    component: () =>
+      import(/* webpackChunkName: "DevicePage" */ "../views/DevicePage.vue"),
   },
 ];
 

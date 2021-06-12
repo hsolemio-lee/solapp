@@ -26,12 +26,16 @@ public class DatabaseConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String primaryDriver;
 
+    @Value("${spring.datasource.password}")
+    private String primaryPassword;
+
     @Bean(name = "datasource")
     @Primary
     public HikariDataSource primaryDataSource() {
         HikariDataSource hikariDataSource = new HikariDataSource();
 
         hikariDataSource.setUsername(primaryUserName);
+        hikariDataSource.setPassword(primaryPassword);
         hikariDataSource.setDriverClassName(primaryDriver);
         hikariDataSource.setJdbcUrl(primaryJdbcUrl);
         hikariDataSource.setMaximumPoolSize(10);

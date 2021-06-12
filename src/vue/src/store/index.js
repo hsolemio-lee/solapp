@@ -12,7 +12,9 @@ export default new Vuex.Store({
       {id: 1, username: 'sol', password: "1234"}
     ],
     isLogin: false,
-    isLoginError: false
+    isLoginError: false,
+
+    progressBar: false,
   },
   mutations: {
     // 로그인 성공
@@ -26,10 +28,12 @@ export default new Vuex.Store({
       state.isLogin = false;
       state.isLoginError = true;
     },
-
     logout(state) {
       state.isLogin = false;
       state.userInfo = null;
+    },
+    showProgressBar(state, arg) {
+      state.progressBar = arg;
     }
   },
   actions: {
@@ -72,6 +76,9 @@ export default new Vuex.Store({
     logout({commit}) {
       commit('logout');
       router.push({name: 'login'});
+    },
+    showProgressBar({commit}, arg) {
+      commit('showProgressBar', arg);
     }
   },
   modules: {},

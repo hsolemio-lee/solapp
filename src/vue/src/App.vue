@@ -10,9 +10,14 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item router :to="{name: 'smartthings'}">
+        <v-list-item router :to="{name: 'scenePage'}">
           <v-list-item-content>
-            <v-list-item-title>Smart Things</v-list-item-title>
+            <v-list-item-title>Scene</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item router :to="{name: 'devicePage'}">
+          <v-list-item-content>
+            <v-list-item-title>Device</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list> 
@@ -58,7 +63,17 @@
         color="primary"
       ></v-progress-circular> -->
     </v-main>
-    
+    <v-layout align-center justify-center column fill-height>
+      <v-flex row align-center>
+      <v-progress-circular
+        class="progress-bar"
+        v-if="$store.state.progressBar"
+        :size="50"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+      </v-flex>
+    </v-layout>    
   </v-app>
 </template>
 <script>
@@ -78,3 +93,5 @@
     }
   }
 </script>
+<style scoped>
+</style>
