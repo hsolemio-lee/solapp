@@ -37,11 +37,11 @@ const routes = [
       import(/* webpackChunkName: "Login" */ "../views/Login.vue"),
   },
   {
-    path: "/smartthings",
-    name: "smartthings",
+    path: "/scenePage",
+    name: "scenePage",
     beforeEnter: authUser,
     component: () =>
-      import(/* webpackChunkName: "Smartthings" */ "../views/SmartThings.vue"),
+      import(/* webpackChunkName: "Smartthings" */ "../views/ScenePage.vue"),
   },
 ];
 
