@@ -21,7 +21,7 @@
             </v-col>
             </v-row>
         </v-parallax>
-        <v-col class="ma-10">
+        <v-col>
             <v-card
                 class="mx-auto"
                 max-width="1200"
@@ -68,7 +68,7 @@
             </v-card> 
             
         </v-col>
-        <v-col class="ma-10">
+        <v-col>
             <v-carousel
                 cycle
                 hide-delimiter-background

@@ -5,6 +5,11 @@
       app
     >
       <v-list dense>
+		 <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Solcha's Home</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item router :to="{name: 'home'}">
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
