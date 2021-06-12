@@ -19,7 +19,7 @@ export default {
     components: {
         SceneCard,
     },
-    name: 'smartthings',
+    name: 'scenePage',
     data() {
         return {
             items: null,
