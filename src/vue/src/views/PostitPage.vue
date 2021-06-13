@@ -71,19 +71,19 @@
         >
             {{ snackbarText }}
         </v-snackbar>
-        <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading>
+        <!-- <infinite-loading @infinite="infiniteHandler" spinner="waveDots"></infinite-loading> -->
     </v-container>
 </template>
 <script>
 import Postit from "../components/Postit"
 import {mapActions} from "vuex";
-import InfiniteLoading from "vue-infinite-loading";
+// import InfiniteLoading from "vue-infinite-loading";
 
 export default {
     
     components: {
         Postit,
-        InfiniteLoading
+        // InfiniteLoading
     },
     name: 'postitPage',
     data() {
@@ -97,11 +97,11 @@ export default {
             snackbar: false,
             snackbarText: "",
             limit: 0,
-            size: 10,
+            size: 50,
         }
     },
     created() {
-        // getPostits();
+        this.getPostits();
     },
     methods: {
         ...mapActions(["showProgressBar"]),
@@ -168,32 +168,32 @@ export default {
             this.currentPostit.textCntnt = item.textCntnt;
             this.dialog = true;
         },
-        infiniteHandler($state) {
-            const EACH_LEN = 30
-            this.$http.get(`/rest/v1/postit?page=${this.limit}&size=${this.size}`)
-            .then(res => {
-                return res.data.content;
-            })
-            .then(data => {
-                setTimeout(() => {
-                    if(data.length) {
-                        this.items = this.items.concat(data);
-                        $state.loaded()
-                        this.limit += 1
-                        console.log("after", this.items.length, this.limit);
-                        // 끝 지정(No more data) - 데이터가 EACH_LEN개 미만이면 
-                        if(data.length / EACH_LEN < 1) {
-                        $state.complete()
-                        }
-                    } else {
-                        // 끝 지정(No more data)
-                        $state.complete()
-                    }
-                }, 1000)
-            }).catch(err => {
-                console.error(err);
-            });
-        }
+        // infiniteHandler($state) {
+        //     const EACH_LEN = 30
+        //     this.$http.get(`/rest/v1/postit?page=${this.limit}&size=${this.size}`)
+        //     .then(res => {
+        //         return res.data.content;
+        //     })
+        //     .then(data => {
+        //         setTimeout(() => {
+        //             if(data.length) {
+        //                 this.items = this.items.concat(data);
+        //                 $state.loaded()
+        //                 this.limit += 1
+        //                 console.log("after", this.items.length, this.limit);
+        //                 // 끝 지정(No more data) - 데이터가 EACH_LEN개 미만이면 
+        //                 if(data.length / EACH_LEN < 1) {
+        //                 $state.complete()
+        //                 }
+        //             } else {
+        //                 // 끝 지정(No more data)
+        //                 $state.complete()
+        //             }
+        //         }, 1000)
+        //     }).catch(err => {
+        //         console.error(err);
+        //     });
+        // }
         
     }
 }
