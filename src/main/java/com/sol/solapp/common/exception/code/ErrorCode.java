@@ -14,7 +14,8 @@ public enum ErrorCode {
     UNKNOWN_ERROR("SOL500-001", "Unknown error"),
     UNAUTHORIZED("SOL401-001", "Unauthorized"),
     FORBIDDEN("SOL403-001", "Forbidden"),
-    USER_NOT_FOUND("SOL404-001", "User Not Found")
+    USER_NOT_FOUND("SOL404-001", "User Not Found"),
+    POSTIT_NOT_FOUND("SOL404-002", "POSTIT Not Found")
     ;
 
     private String code;

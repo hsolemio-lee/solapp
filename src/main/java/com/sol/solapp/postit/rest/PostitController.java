@@ -37,7 +37,6 @@ public class PostitController {
 
 	@PutMapping
 	public ResponseEntity<PostitDTO> updatePostit(@AuthenticationPrincipal PrincipalDetails principal, @RequestBody PostitDTO dto) { 
-        dto.setCreateUser(principal.getUser().getUsername());
         dto.setUpdateUser(principal.getUser().getUsername());
 		return ResponseEntity.ok(postitService.updatePostit(dto));
 	}

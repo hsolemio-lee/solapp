@@ -41,15 +41,17 @@ public class PostitService {
     }
 	
 	public Page<PostitDTO> getPostits(Pageable pageable) {
-		Page<Postit> postits = postitRepository.findAll(pageable);
+		Page<Postit> postits = postitRepository.findAllByOrderByUpdateDateDesc(pageable);
 		long totalCount = postits.getTotalElements();
 		return new PageImpl<PostitDTO>(postits.getContent().stream().map(PostitConverter.INSTANCE::toDto).collect(Collectors.toList()), pageable, totalCount);
 	}
 
     public PostitDTO updatePostit(PostitDTO dto) {
         Postit postit = PostitConverter.INSTANCE.toEntity(dto);
+        Postit originPostit = postitRepository.findById(postit.getId()).orElseThrow(() -> new ServiceException(ErrorCode.POSTIT_NOT_FOUND));
+        postit.setCreateUser(originPostit.getCreateUser());
         postit = postitRepository.save(postit);
-        return PostitConverter.INSTANCE.toDto(postit); 
+        return PostitConverter.INSTANCE.toDto(postit);
     }
 
 }

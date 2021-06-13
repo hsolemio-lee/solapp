@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface PostitRepository extends JpaRepository<Postit, Long> {
 
-    Page<Postit> findAll(Pageable pageable);
+    Page<Postit> findAllByOrderByUpdateDateDesc(Pageable pageable);
+
+    Optional<Postit> findById(Long id);
    
 }

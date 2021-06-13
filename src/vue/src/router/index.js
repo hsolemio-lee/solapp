@@ -24,6 +24,10 @@ const authUser = (to, from, next) => {
 const routes = [
   {
     path: "/",
+    redirect: "/home"
+  },
+  {
+    path: "/home",
     name: "home",
     beforeEnter: authUser,
     component: () =>
@@ -44,11 +48,11 @@ const routes = [
       import(/* webpackChunkName: "ScenePage" */ "../views/ScenePage.vue"),
   },
   {
-    path: "/devicePage",
-    name: "devicePage",
+    path: "/postitPage",
+    name: "postitPage",
     beforeEnter: authUser,
     component: () =>
-      import(/* webpackChunkName: "DevicePage" */ "../views/DevicePage.vue"),
+      import(/* webpackChunkName: "DevicePage" */ "../views/PostitPage.vue"),
   },
 ];
 

@@ -5,11 +5,6 @@
       app
     >
       <v-list dense>
-		 <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>Solcha's Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item router :to="{name: 'home'}">
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
@@ -20,9 +15,9 @@
             <v-list-item-title>Scene</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item router :to="{name: 'devicePage'}">
+        <v-list-item router :to="{name: 'postitPage'}">
           <v-list-item-content>
-            <v-list-item-title>Device</v-list-item-title>
+            <v-list-item-title>Post it</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list> 
