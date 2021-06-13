@@ -24,8 +24,8 @@ public class PostitController {
 	private final PostitService postitService;	
 
 	@GetMapping
-	public ResponseEntity<?> getPostits() {
-		return ResponseEntity.ok(null);
+	public ResponseEntity<Page<PostitDTO>> getPostits(Pageable pageable) {
+		return ResponseEntity.ok(postitService.getPostits(pageable));
 	}
 
 	@PostMapping
@@ -35,9 +35,11 @@ public class PostitController {
 		return ResponseEntity.ok(postitService.createPostit(postit));
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updatePostit(@PathVariable("id") Long id) {
-		return ResponseEntity.ok(null);
+	@PutMapping
+	public ResponseEntity<PostitDTO> updatePostit(@AuthenticationPrincipal PrincipalDetails principal, @RequestBody PostitDTO dto) { 
+        dto.setCreateUser(principal.getUser().getUsername());
+        dto.setUpdateUser(principal.getUser().getUsername());
+		return ResponseEntity.ok(postitService.updatePostit(dto));
 	}
 
 		

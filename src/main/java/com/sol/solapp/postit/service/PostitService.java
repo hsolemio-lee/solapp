@@ -6,6 +6,7 @@ import com.sol.solapp.common.util.ValidateUtil;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,20 @@ public class PostitService {
  
     public PostitDTO createPostit(PostitDTO dto) {
         Postit postit = PostitConverter.INSTANCE.toEntity(dto);
-    	postit = postitRepository.save(postit);    
+        postit = postitRepository.save(postit);    
         return PostitConverter.INSTANCE.toDto(postit);
     }
+	
+	public Page<PostitDTO> getPostits(Pageable pageable) {
+		Page<Postit> postits = postitRepository.findAll(pageable);
+		long totalCount = postits.getTotalElements();
+		return new PageImpl<PostitDTO>(postits.getContent().stream().map(PostitConverter.INSTANCE::toDto).collect(Collectors.toList()), pageable, totalCount);
+	}
+
+    public PostitDTO updatePostit(PostitDTO dto) {
+        Postit postit = PostitConverter.INSTANCE.toEntity(dto);
+        postit = postitRepository.save(postit);
+        return PostitConverter.INSTANCE.toDto(postit); 
+    }
+
 }
