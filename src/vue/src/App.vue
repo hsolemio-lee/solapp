@@ -58,10 +58,6 @@
     </v-app-bar>
     <v-main>
       <router-view/>
-      <!-- <v-progress-circular
-        indeterminate
-        color="primary"
-      ></v-progress-circular> -->
     </v-main>
     <v-layout align-center justify-center column fill-height>
       <v-flex row align-center>
@@ -73,7 +69,15 @@
         indeterminate
       ></v-progress-circular>
       </v-flex>
-    </v-layout>    
+    </v-layout>
+     <v-snackbar
+            bottom
+            height="80"
+            timeout="2000"
+            v-model="$store.state.snackbar"
+        >
+           {{ snackbarText }}
+    </v-snackbar>
   </v-app>
 </template>
 <script>
@@ -85,9 +89,15 @@
       }
     },
     computed: {
-      showWelcome() {
-        return this.$store.state.isLogin;
-      }
+        showWelcome() {
+            return this.$store.state.isLogin;
+        },
+        snackbar() {
+            return this.$store.state.snackbar;    
+        },
+        snackbarText() {
+            return this.$store.state.snackbarText;
+        }
     },
     method: {
     }

@@ -23,18 +23,11 @@
             >
                 Execute
             </v-btn>
-        </v-card-actions>
-        <v-snackbar
-            bottom
-            height="80"
-            timeout="2000"
-            v-model="snackbar"
-        >
-            {{ snackbarText }}
-        </v-snackbar>
+        </v-card-actions>    
     </v-card>
 </template>
 <script>
+import {mapActions} from "vuex"
 
 export default {
     props: {
@@ -57,8 +50,6 @@ export default {
                 sceneName: "",
                 sceneId: "",
             },
-            snackbar: false,
-            snackbarText: "Execute Success!!",
             buttonLoading: false,
         }
     },
@@ -69,6 +60,7 @@ export default {
     computed: {
     },
     methods: {
+        ...mapActions(["showSnackbar"]),
         executeScene() {
             this.buttonLoading = true;
             this.$http.post(`/rest/v1/smartthings/scenes/execute/${this.scene.sceneId}`)
@@ -86,10 +78,6 @@ export default {
                 this.showSnackbar("Execute Fail!!");
             });
         },
-        showSnackbar(text) {
-            this.snackbar = true;
-            this.snackbarText = text;
-        }
     }
 }
 </script>

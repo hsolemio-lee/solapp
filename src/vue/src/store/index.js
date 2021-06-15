@@ -15,6 +15,9 @@ export default new Vuex.Store({
     isLoginError: false,
 
     progressBar: false,
+
+    snackbar: false,
+    snackbarText: "",
   },
   mutations: {
     // 로그인 성공
@@ -34,6 +37,11 @@ export default new Vuex.Store({
     },
     showProgressBar(state, arg) {
       state.progressBar = arg;
+    },
+    showSnackbar(state, arg) {
+        state.snackbar = false;
+        state.snackbar = true;
+        state.snackbarText = arg;
     }
   },
   actions: {
@@ -74,11 +82,14 @@ export default new Vuex.Store({
       })
     },
     logout({commit}) {
-      commit('logout');
-      router.push({name: 'login'});
+        commit('logout');
+        router.push({name: 'login'});
     },
     showProgressBar({commit}, arg) {
-      commit('showProgressBar', arg);
+        commit('showProgressBar', arg);
+    },
+    showSnackbar({commit}, arg) {
+        commit('showSnackbar', arg);
     }
   },
   modules: {},

@@ -94,8 +94,6 @@ export default {
                 id: null,
                 textCntnt: "",
             },
-            snackbar: false,
-            snackbarText: "",
             limit: 0,
             size: 50,
         }
@@ -104,7 +102,7 @@ export default {
         this.getPostits();
     },
     methods: {
-        ...mapActions(["showProgressBar"]),
+        ...mapActions(["showProgressBar", "showSnackbar"]),
         getPostits() {
             this.showProgressBar(true);
             this.$http.get(`/rest/v1/postit?page=${this.limit}&size=${this.size}`)
@@ -116,8 +114,7 @@ export default {
             })
             .catch(error => {
                 console.log(error);
-                this.snackbar = true;
-                this.snackbarText = "Error getting post it!!"
+                this.showSnackbar("Error... Failed...");            
                 this.showProgressBar(false);
             });
         },
@@ -133,32 +130,28 @@ export default {
                 .then(res => {
                     console.log(res);
                     this.showProgressBar(false);
-                    this.snackbarText = "Saved Successfully!!";
-                    this.snackbar = true;
+                    this.showSnackbar("Saved Successfully!!");
                     this.dialog = false;
                     this.getPostits();
                 })
                 .catch(error => {
                     console.log(error);
                     this.showProgressBar(false);
-                    this.snackbarText = "Failed!!";
-                    this.snackbar = true;
+                    this.showSnackbar("Error... Failed...");
                 });
             } else {
                this.$http.put("/rest/v1/postit", this.currentPostit)
                 .then(res => {
                     console.log(res);
                     this.showProgressBar(false);
-                    this.snackbarText = "Saved Successfully!!";
-                    this.snackbar = true;
+                    this.showSnackbar("Saved Successfully!!");
                     this.dialog = false;
                     this.getPostits();
                 })
                 .catch(error => {
                     console.log(error);
                     this.showProgressBar(false);
-                    this.snackbarText = "Failed!!";
-                    this.snackbar = true;
+                    this.showSnackbar("Error... Failed...");
                 }); 
             }
         },
