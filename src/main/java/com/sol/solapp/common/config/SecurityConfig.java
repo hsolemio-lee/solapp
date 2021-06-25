@@ -70,8 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
+        CorsConfiguration configuration = new CorsConfiguration(); 
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:9090", "http://192.168.0.10:8080", "http://hansolo.iptime.org", "http://hansolo.iptime.org:8080", "http://192.168.0.7:9090", "http://hansolo.iptime.org:9090"));
         configuration.setAllowedHeaders(Arrays.asList("x-requested-with", "origin", "content-type", "accept", "x-xsrf-token", "pd-super-key", "authorization"));
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"));

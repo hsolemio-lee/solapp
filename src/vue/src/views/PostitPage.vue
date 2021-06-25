@@ -160,34 +160,7 @@ export default {
             this.currentPostit.id = item.id;
             this.currentPostit.textCntnt = item.textCntnt;
             this.dialog = true;
-        },
-        // infiniteHandler($state) {
-        //     const EACH_LEN = 30
-        //     this.$http.get(`/rest/v1/postit?page=${this.limit}&size=${this.size}`)
-        //     .then(res => {
-        //         return res.data.content;
-        //     })
-        //     .then(data => {
-        //         setTimeout(() => {
-        //             if(data.length) {
-        //                 this.items = this.items.concat(data);
-        //                 $state.loaded()
-        //                 this.limit += 1
-        //                 console.log("after", this.items.length, this.limit);
-        //                 // 끝 지정(No more data) - 데이터가 EACH_LEN개 미만이면 
-        //                 if(data.length / EACH_LEN < 1) {
-        //                 $state.complete()
-        //                 }
-        //             } else {
-        //                 // 끝 지정(No more data)
-        //                 $state.complete()
-        //             }
-        //         }, 1000)
-        //     }).catch(err => {
-        //         console.error(err);
-        //     });
-        // }
-        
+        },      
     }
 }
 </script>

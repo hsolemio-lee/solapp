@@ -76,7 +76,7 @@
             timeout="2000"
             v-model="$store.state.snackbar"
         >
-           {{ snackbarText }}
+           {{ $store.state.snackbarText }}
     </v-snackbar>
   </v-app>
 </template>
@@ -92,12 +92,6 @@
         showWelcome() {
             return this.$store.state.isLogin;
         },
-        snackbar() {
-            return this.$store.state.snackbar;    
-        },
-        snackbarText() {
-            return this.$store.state.snackbarText;
-        }
     },
     method: {
     }

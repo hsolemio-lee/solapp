@@ -124,7 +124,10 @@ export default {
         }
     },
     created() {
-        
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position.coords.latitude, position.coords.longitude);
+            alert(position.coords.latitude, position.coords.longitude);
+        });
     },
     computed: {
         ...mapState(["userInfo"]),
